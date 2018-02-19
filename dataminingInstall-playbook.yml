@@ -1,0 +1,23 @@
+---
+# NETSCOUT Playbook to configure NETSCOUT ASR from ISNG
+#
+#
+#
+
+- hosts: ISNG
+  gather_facts: false
+#  vars: 
+#    ansible_ssh_port: 2204
+  tasks:
+    - stat:
+        path: /opt/NetScout/dataminingkit/exportclientkit
+      register: kit
+    - debug:
+        msg: "exportclientkit directory is present"
+      when: kit.stat.isdir is defined and kit.stat.isdir
+    - name: untar exportclientkit.tar
+      unarchive:
+        owner: root
+        src: /opt/NetScout/dataminingkit/exportclientkit.tar
+        dest: /opt/NetScout/dataminingkit
+        remote_src: yes
